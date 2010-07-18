@@ -120,8 +120,8 @@ IP=any
 #/sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 6700 out xmit $INTERFACE
 /sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 10700 out xmit $INTERFACE
 /sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 10701 out xmit $INTERFACE
-#/sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 2000 out xmit $INTERFACE
-#/sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 2001 out xmit $INTERFACE
+/sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 2000 out xmit $INTERFACE
+/sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 2001 out xmit $INTERFACE
 
 # prioritize hotline and carracho listing ports (server end)
 # /sbin/ipfw add $RULENUM divert 17778 tcp from $IP 5500 to any out xmit $INTERFACE
