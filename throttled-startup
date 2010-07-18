@@ -18,7 +18,8 @@ INTERFACE=en0
 # 384k upload - "MAXSPEED=49152"
 # 256k upload - "MAXSPEED=32768"
 # 128k upload - "MAXSPEED=16384"
-MAXSPEED=81920
+# 10k upload - "MAXSPEED=10240"
+MAXSPEED=30720
 
 # DON'T CHANGE ANYTHING BELOW UNLESS YOU KNOW WHAT YOUR DOING.
 # most users should not edit anything below. you have been warned.
@@ -30,14 +31,14 @@ MAXSPEED=81920
 RULENUM=00070
 
 # usage: throttled [-ATLh] -s speed -r rule [-i increment] [-d port] [-p priority]
-# -s speed        Max speed in bytes/second (required)
+# -s speed        Max speed in bytes/second (required) ( 10k = 10240 )
 # -r rule         IPFW rule number to remove when quit (required)
 # -i increment    Amount to change the throttle in bytes/sec (USR1 - Decrease | USR2 - Increase)
 # -T              Enable iTunes TTL fix 
 # -h              This help screen
 # -v              Version information
 # -d port         Divert port (optional, may specify more than one)
-#         -w weight     Weight for the divert port specified prior to this option.
+# -w weight       Weight for the divert port specified prior to this option.
 
 # launch throttled with a maxspeed of $MAXSPEED
 # this throttled instance has 3 weights, this allows us to prioritize low 
@@ -99,6 +100,13 @@ IP=any
 # prioritize msn
 # /sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 1863 out xmit $INTERFACE
 
+# prioritize aol/aim
+/sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 5090 out xmit $INTERFACE
+
+# prioritize xmpp/jabber/gtalk
+/sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 5222 out xmit $INTERFACE
+/sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 5223 out xmit $INTERFACE
+
 # prioritize pop3
 /sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 110 out xmit $INTERFACE
 
@@ -107,14 +115,21 @@ IP=any
 /sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 6668 out xmit $INTERFACE
 /sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 9999 out xmit $INTERFACE
 
-# prioritize hotline, carracho, wired listing ports (client end)
-/sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 5500 out xmit $INTERFACE
-/sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 6700 out xmit $INTERFACE
-/sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 2000 out xmit $INTERFACE
+# prioritize hotline, carracho, kdx, wired, listing ports (client end)
+#/sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 5500 out xmit $INTERFACE
+#/sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 6700 out xmit $INTERFACE
+/sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 10700 out xmit $INTERFACE
+/sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 10701 out xmit $INTERFACE
+#/sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 2000 out xmit $INTERFACE
+#/sbin/ipfw add $RULENUM divert 17778 tcp from $IP to any 2001 out xmit $INTERFACE
 
 # prioritize hotline and carracho listing ports (server end)
 # /sbin/ipfw add $RULENUM divert 17778 tcp from $IP 5500 to any out xmit $INTERFACE
 # /sbin/ipfw add $RULENUM divert 17778 tcp from $IP 6700 to any out xmit $INTERFACE
+# /sbin/ipfw add $RULENUM divert 17778 tcp from $IP 10700 to any out xmit $INTERFACE
+# /sbin/ipfw add $RULENUM divert 17778 tcp from $IP 10701 to any out xmit $INTERFACE
+# /sbin/ipfw add $RULENUM divert 17778 tcp from $IP 2000 to any out xmit $INTERFACE
+# /sbin/ipfw add $RULENUM divert 17778 tcp from $IP 2001 to any out xmit $INTERFACE
 
 # prioritize VNC
 /sbin/ipfw add $RULENUM divert 17779 tcp from $IP 5900 to any out xmit $INTERFACE
@@ -131,27 +146,27 @@ IP=any
 /sbin/ipfw add $RULENUM divert 17779 tcp from $IP to any 3724 out xmit $INTERFACE
 
 # prioritize Diablo II, Starcraft, Warcraft II, and Warcraft III
-/sbin/ipfw add $RULENUM divert 17778 tcp from $IP 6112-6119 to any out xmit $INTERFACE
-/sbin/ipfw add $RULENUM divert 17778 udp from $IP 6112-6119 to any out xmit $INTERFACE
-/sbin/ipfw add $RULENUM divert 17778 tcp from $IP 4000 to any out xmit $INTERFACE
+# /sbin/ipfw add $RULENUM divert 17778 tcp from $IP 6112-6119 to any out xmit $INTERFACE
+# /sbin/ipfw add $RULENUM divert 17778 udp from $IP 6112-6119 to any out xmit $INTERFACE
+# /sbin/ipfw add $RULENUM divert 17778 tcp from $IP 4000 to any out xmit $INTERFACE
 
 # prioritize Unreal Tournament 2004
-/sbin/ipfw add $RULENUM divert 17778 tcp from $IP 28902 to any out xmit $INTERFACE
-/sbin/ipfw add $RULENUM divert 17778 udp from $IP 7777-7778 to any out xmit $INTERFACE
-/sbin/ipfw add $RULENUM divert 17778 udp from $IP 7787 to any out xmit $INTERFACE
+# /sbin/ipfw add $RULENUM divert 17778 tcp from $IP 28902 to any out xmit $INTERFACE
+# /sbin/ipfw add $RULENUM divert 17778 udp from $IP 7777-7778 to any out xmit $INTERFACE
+# /sbin/ipfw add $RULENUM divert 17778 udp from $IP 7787 to any out xmit $INTERFACE
 
 # prioritize Call of Duty
-/sbin/ipfw add $RULENUM divert 17778 tcp from $IP 28960 to any out xmit $INTERFACE
-/sbin/ipfw add $RULENUM divert 17778 udp from $IP 28960 to any out xmit $INTERFACE
-/sbin/ipfw add $RULENUM divert 17778 udp from $IP 20500 to any out xmit $INTERFACE
-/sbin/ipfw add $RULENUM divert 17778 udp from $IP 20510 to any out xmit $INTERFACE
+# /sbin/ipfw add $RULENUM divert 17778 tcp from $IP 28960 to any out xmit $INTERFACE
+# /sbin/ipfw add $RULENUM divert 17778 udp from $IP 28960 to any out xmit $INTERFACE
+# /sbin/ipfw add $RULENUM divert 17778 udp from $IP 20500 to any out xmit $INTERFACE
+# /sbin/ipfw add $RULENUM divert 17778 udp from $IP 20510 to any out xmit $INTERFACE
 
 # prioritize Quake 3
-/sbin/ipfw add $RULENUM divert 17778 udp from $IP 27660-27665 to any out xmit $INTERFACE
+# /sbin/ipfw add $RULENUM divert 17778 udp from $IP 27660-27665 to any out xmit $INTERFACE
 
 # prioritize Ghost Recon
-/sbin/ipfw add $RULENUM divert 17778 tcp from $IP 2346 to any out xmit $INTERFACE
-/sbin/ipfw add $RULENUM divert 17778 udp from $IP 2347-2348 to any out xmit $INTERFACE
+# /sbin/ipfw add $RULENUM divert 17778 tcp from $IP 2346 to any out xmit $INTERFACE
+# /sbin/ipfw add $RULENUM divert 17778 udp from $IP 2347-2348 to any out xmit $INTERFACE
 
 # bind to throttle low priority services.
 /sbin/ipfw add $RULENUM divert 17777 ip from $IP to any out xmit $INTERFACE
